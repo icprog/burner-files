@@ -1,25 +1,31 @@
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 TOP_DIR := $(patsubst %/,%,$(dir $(MKFILE_PATH)))
 
-.PHONY: all vendor binaries build
+.PHONY: all vendor binaries build config
 
 all:
 	@echo "make vendor"
 	@echo "make build"
+	@echo "make config"
 	@echo "make run.fcserver"
 	@echo "make run.dev.fcserver"
+	@echo "make run.glserver"
 
 build: bin.fcserver
 
+config:
+	cd config/2015-burning-man && python gen-layout.py
+
 bin.fcserver:
 	mkdir -p bin
-	# Replicate fadecandy .gitmodules
+
+# Replicate fadecandy .gitmodules
 	cd vendor/fadecandy/server && rm -rf libusbx && ln -fs ../../libusbx
 	cd vendor/fadecandy/server && rm -rf libwebsockets && ln -fs ../../libwebsockets
 	cd vendor/fadecandy/server && rm -rf rapidjson && ln -fs ../../rapidjson
 
-	# Set TERM='' for the build because otherwise one of Python modules outputs junk
-	# junk escape sequence on some platforms when imported.  This breaks FC's manifest.py.
+# Set TERM='' for the build because otherwise one of Python modules outputs junk
+# junk escape sequence on some platforms when imported.  This breaks FC's manifest.py.
 	cd vendor/fadecandy/server && make TERM='' && mv fcserver $(TOP_DIR)/bin/
 
 run.fcserver:
@@ -27,6 +33,9 @@ run.fcserver:
 
 run.dev.fcserver:
 	./bin/fcserver config/2015-burning-man/fcserver-dev.json
+
+run.glserver:
+	./vendor/openpixelcontrol/bin/gl_server -l config/2015-burning-man/glserver-layout.json
 
 ##################################################
 # vendor

@@ -19,6 +19,11 @@ LED_CNT = ROWS * COLS
 
 COLOR_LAYOUT = "rgb"
 
+GL_SCALE = 0.2
+GL_X     = -2
+GL_Y     = 0
+GL_Z     = -1
+
 def print_out(pixels):
     for y in range(ROWS):
         for p in pixels[y * COLS:y * COLS + COLS]:
@@ -41,7 +46,7 @@ def gen_pixels():
     def set_pixel(x, y, strand, idx_on_strand):
         # Fadecandy constant: the first led on strand n has index 64*n
         STRAND_START = 64 * strand
-        ret[pos(x, y)] = [strand, STRAND_START + idx_on_strand, (0, 0, 0)]
+        ret[pos(x, y)] = [strand, STRAND_START + idx_on_strand, (GL_X + GL_SCALE * x, GL_Y, GL_Z + GL_SCALE * y)]
 
     for s in range(STRANDS):
         for x in range(COLS):
@@ -80,8 +85,14 @@ def write_fcserver_config(fname, listen_addr, pixels):
     f = open(fname, 'w')
     f.write(FCSERVER_CONFIG_TEMPLATE % locals())
 
+def write_glserver_layout(fname, pixels):
+    points = ",\n".join('{"point": [%f, %f, %f]}' % p[2]
+                        for p in pixels)
+    open(fname, 'w').write("[\n" + points + "]\n")
+
 pixels = gen_pixels()
 write_fcserver_config("fcserver.json", "127.0.0.1", pixels)
 write_fcserver_config("fcserver-dev.json", "0.0.0.0", pixels)
+write_glserver_layout("glserver-layout.json", pixels)
 
 print_out(pixels)
