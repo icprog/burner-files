@@ -22,7 +22,7 @@ COLOR_LAYOUT = "rgb"
 def print_out(pixels):
     for y in range(ROWS):
         for p in pixels[y * COLS:y * COLS + COLS]:
-            print "%d:%03d" % tuple(p),
+            print "%d:%03d" % (p[0], p[1]),
         print
 
 def pos(x, y):
@@ -30,24 +30,25 @@ def pos(x, y):
 
 # Build an array:
 #
-# led_idx: [strand_idx, opc_led_idx]
+# led_idx: [strand_idx, fc_led_idx, (lx, ly, lz)]
 #
-# - led_idx is the index of led in natural order (row_idx * COLS + col_idx)
-# - opc_led_idx is the index of that led in OPC protocol
+# - led_idx is the OPC index of a led (in natural order: row_idx * COLS + col_idx)
+# - fc_led_idx is the fadecandy address of that led
+# - lx, ly, lz is the position of that LED in space
 def gen_pixels():
     ret = [[0, 0] for i in range(LED_CNT)]
 
-    for l in range(STRANDS):
+    def set_pixel(x, y, strand, idx_on_strand):
         # Fadecandy constant: the first led on strand n has index 64*n
-        STRAND_START = 64 * l
+        STRAND_START = 64 * strand
+        ret[pos(x, y)] = [strand, STRAND_START + idx_on_strand, (0, 0, 0)]
+
+    for s in range(STRANDS):
         for x in range(COLS):
-            p = ret[pos(x, 2 * l)]
-            p[0] = l
-            p[1] = STRAND_START + x
-    
-            p = ret[pos(COLS - x - 1, 2 * l + 1)]
-            p[0] = l
-            p[1] = STRAND_START + x + COLS
+            # top half
+            set_pixel(x, 2 * s, s, x)
+            # bottom half
+            set_pixel(x, 2 * s + 1, s, 2 * COLS - x - 1)
 
     return ret
 
@@ -73,7 +74,7 @@ FCSERVER_CONFIG_TEMPLATE = """
 """
 
 def write_fcserver_config(fname, listen_addr, pixels):
-    map_str = ",\n".join("[ %d, %d, %d, %d, \"%s\"]"
+    map_str = ",\n".join('[ %d, %d, %d, %d, "%s"]'
                          % (0, i, p[1], 1, COLOR_LAYOUT)
                  for (i, p) in enumerate(pixels))
     f = open(fname, 'w')
