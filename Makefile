@@ -14,7 +14,7 @@ all:
 build: bin.fcserver
 
 config:
-	cd config/2015-burning-man && python gen-layout.py
+	cd 2015-burning-man && python gen-layout.py
 
 bin.fcserver:
 	mkdir -p bin
@@ -29,13 +29,13 @@ bin.fcserver:
 	cd vendor/fadecandy/server && make TERM='' && mv fcserver $(TOP_DIR)/bin/
 
 run.fcserver:
-	./bin/fcserver config/2015-burning-man/fcserver.json
+	./bin/fcserver 2015-burning-man/fcserver.json
 
 run.dev.fcserver:
-	./bin/fcserver config/2015-burning-man/fcserver-dev.json
+	./bin/fcserver 2015-burning-man/fcserver-dev.json
 
 run.glserver:
-	./vendor/openpixelcontrol/bin/gl_server -l config/2015-burning-man/glserver-layout.json
+	./vendor/openpixelcontrol/bin/gl_server -l 2015-burning-man/glserver-layout.json
 
 ##################################################
 # vendor
