@@ -15,5 +15,5 @@ rm -rf "$NAME"
 git clone -o "$NAME" "$URL"
 cd "$NAME"
 git reset --hard "$VERSION"
-rm -rf `find . -name .git -or -name .gitmodules`
+rm -rf `find . -name .git` `find . -name .gitmodules`
 echo "$VERSION" > vendor-commit
