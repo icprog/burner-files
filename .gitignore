@@ -1,4 +1,5 @@
 *~
+\#*
 *.d
 vendor/fadecandy/server/libusbx
 vendor/fadecandy/server/libwebsockets
