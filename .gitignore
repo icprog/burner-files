@@ -1,6 +1,7 @@
 *~
 \#*
 *.d
+*.pyc
 vendor/fadecandy/server/libusbx
 vendor/fadecandy/server/libwebsockets
 vendor/fadecandy/server/rapidjson

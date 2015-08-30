@@ -10,6 +10,7 @@ all:
 	@echo "make run.fcserver"
 	@echo "make run.dev.fcserver"
 	@echo "make run.glserver"
+	@echo "make run.sign"
 
 build: bin.fcserver
 
@@ -36,6 +37,9 @@ run.dev.fcserver:
 
 run.glserver:
 	./vendor/openpixelcontrol/bin/gl_server -l 2015-burning-man/glserver-layout.json
+
+run.sign:
+	cd 2015-burning-man && ./run_sign.sh
 
 ##################################################
 # vendor
