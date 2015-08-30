@@ -16,8 +16,13 @@ from raver import Raver
 from waves import Waves
 from fullred import FullRed
 from sine import Sine
+from patterns import CAMP_DEAR
 
-effects = [Waves(200), FullRed(200), Sine(200)]
+COLS = 20
+ROWS = 12
+
+# effects = [Waves(COLS, ROWS), FullRed(COLS, ROWS), Sine(COLS, ROWS)]
+effects = [Waves(COLS, ROWS, CAMP_DEAR)]
 effect_idx = 0
 
 #-------------------------------------------------------------------------------
