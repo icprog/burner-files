@@ -22,7 +22,7 @@ COLS = 20
 ROWS = 12
 
 # effects = [Waves(COLS, ROWS), FullRed(COLS, ROWS), Sine(COLS, ROWS)]
-effects = [FullRed(COLS, ROWS, CAMP_DEAR)]
+effects = [Sine(COLS, ROWS, CAMP_DEAR)]
 effect_idx = 0
 
 #-------------------------------------------------------------------------------
