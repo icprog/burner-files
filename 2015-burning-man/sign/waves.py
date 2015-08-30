@@ -2,6 +2,8 @@ from __future__ import division
 import color_utils
 import math
 
+from effect import Effect
+
 # how many sine wave cycles are squeezed into our n_pixels
 # 24 happens to create nice diagonal stripes on the wall layout
 freq_r = 0.1
@@ -13,12 +15,7 @@ speed_r = -3
 speed_g = -2
 speed_b = -1
 
-class Waves(object):
-    def __init__(self, cols, rows, pattern):
-        self.cols = cols
-        self.rows = rows
-        self.n_pixels = cols * rows
-        self.pattern = pattern
+class Waves(Effect):
 
     def get_pixels(self, t):
         pixels = []
