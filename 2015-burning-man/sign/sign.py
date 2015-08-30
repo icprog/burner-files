@@ -16,14 +16,14 @@ from raver import Raver
 from waves import Waves
 from fullred import FullRed
 from sine import Sine
-from patterns import CAMP_DEAR
+from flat import Flat
+from patterns import DEAR_BIG
 
 COLS = 20
 ROWS = 12
 
-# effects = [Waves(COLS, ROWS), FullRed(COLS, ROWS), Sine(COLS, ROWS)]
-effects = [Sine(COLS, ROWS, CAMP_DEAR)]
-effect_idx = 0
+#effect_cls = [Waves, FullRed, Sine]
+effect_cls = [Flat]
 
 #-------------------------------------------------------------------------------
 # handle command line
@@ -75,7 +75,7 @@ switch_time = 0
 while True:
     t = time.time() - start_time
     if t >= switch_time:
-        effect = random.choice(effects)
+        effect = random.choice(effect_cls)(COLS, ROWS, DEAR_BIG)
         switch_time = t + random.uniform(3, 3)
     pixels = effect.get_pixels(t)
     client.put_pixels(pixels, channel=0)
