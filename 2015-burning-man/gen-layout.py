@@ -20,9 +20,9 @@ LED_CNT = ROWS * COLS
 COLOR_LAYOUT = "rgb"
 
 GL_SCALE = 0.2
-GL_X     = -2
+GL_X     = 2
 GL_Y     = 0
-GL_Z     = -1
+GL_Z     = 1
 
 def print_out(pixels):
     for y in range(ROWS):
@@ -46,7 +46,8 @@ def gen_pixels():
     def set_pixel(x, y, strand, idx_on_strand):
         # Fadecandy constant: the first led on strand n has index 64*n
         STRAND_START = 64 * strand
-        ret[pos(x, y)] = [strand, STRAND_START + idx_on_strand, (GL_X + GL_SCALE * x, GL_Y, GL_Z + GL_SCALE * y)]
+        p = (GL_X - GL_SCALE * x, GL_Y, GL_Z - GL_SCALE * y)
+        ret[pos(x, y)] = [strand, STRAND_START + idx_on_strand, p]
 
     for s in range(STRANDS):
         for x in range(COLS):
