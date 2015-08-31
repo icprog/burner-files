@@ -9,8 +9,5 @@ class Flat(Effect):
         pixels = []
         for y in range(self.rows):
             for x in range(self.cols):
-                if self.pattern.get(x, y):
-                    pixels.append((255, 255, 255))
-                else:
-                    pixels.append((0, 0, 0))
+                pixels.append(self.pattern.cget(x, y))
         return pixels

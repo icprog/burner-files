@@ -17,7 +17,7 @@ from waves import Waves
 from fullred import FullRed
 from sine import Sine
 from flat import Flat
-from patterns import DEAR_BIG
+from patterns import TEST
 
 COLS = 20
 ROWS = 12
@@ -75,7 +75,7 @@ switch_time = 0
 while True:
     t = time.time() - start_time
     if t >= switch_time:
-        effect = random.choice(effect_cls)(COLS, ROWS, DEAR_BIG)
+        effect = random.choice(effect_cls)(COLS, ROWS, TEST)
         switch_time = t + random.uniform(3, 3)
     pixels = effect.get_pixels(t)
     client.put_pixels(pixels, channel=0)

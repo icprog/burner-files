@@ -1,3 +1,12 @@
+
+DEFAULT_C = (255, 255, 255)
+PALETTE = {
+    '.': (0, 0, 0),
+    'R': (255, 0, 0),
+    'G': (0, 255, 0),
+    'B': (0, 0, 255),
+}
+
 class Pattern:
 
     def __init__(self, name, pat):
@@ -7,7 +16,13 @@ class Pattern:
     def get(self, c, r):
         return ((0 <= r < len(self.pat))
                 and (0 <= c < len(self.pat[r]))
-                and (self.pat[r][c] == '@'))
+                and (self.pat[r][c] != '.'))
+
+    def cget(self, c, r):
+        if not ((0 <= r < len(self.pat))
+                and (0 <= c < len(self.pat[r]))):
+            return DEFAULT_C
+        return PALETTE.get(self.pat[r][c], DEFAULT_C)
 
 def p(name, data):
     return Pattern(name, data)
@@ -42,5 +57,21 @@ CAMP_DEAR = p("camp dear", [
     ".@..@.@@..@@@@.@@@..", #9
     ".@..@.@...@..@.@.@..", #A
     ".@@@..@@@.@..@.@..@.", #B
+])
+
+TEST = p("test", [
+    #01234567890123456789
+    "R@@@............@@@R", #0
+    "@..................@", #1
+    "@..................@", #2
+    "@.RRR....GG...BBB..@", #3
+    "..R..R..G..G..B..B..", #4
+    "..RRR...G.....BBB...", #5
+    "..R..R..G.GG..B..B..", #6
+    "..R..R..G..G..B..B..", #7
+    "@.R..R...GG...BBB..@", #8
+    "@..................@", #9
+    "@..................@", #A
+    "R@@@............@@@R", #B
 ])
 
