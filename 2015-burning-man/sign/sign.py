@@ -17,13 +17,23 @@ from waves import Waves
 from fullred import FullRed
 from sine import Sine
 from flat import Flat
-from patterns import TEST
+from wheel import Wheel
+from patterns import PATTERNS
 
 COLS = 20
 ROWS = 12
 
-#effect_cls = [Waves, FullRed, Sine]
-effect_cls = [Flat]
+# Testing toggle
+if False:
+    pat = PATTERNS['dear-big']
+    effects = [Waves(COLS, ROWS, pat),
+               FullRed(COLS, ROWS, pat),
+               Sine(COLS, ROWS, pat),
+               Flat(COLS, ROWS, pat),
+               Wheel(COLS, ROWS, pat)]
+else:
+    effects = [Wheel(COLS, ROWS, PATTERNS['dear-bold'])]
+
 
 #-------------------------------------------------------------------------------
 # handle command line
@@ -75,7 +85,8 @@ switch_time = 0
 while True:
     t = time.time() - start_time
     if t >= switch_time:
-        effect = random.choice(effect_cls)(COLS, ROWS, TEST)
+        effect = random.choice(effects)
+        effect.switch_on()
         switch_time = t + random.uniform(3, 3)
     pixels = effect.get_pixels(t)
     client.put_pixels(pixels, channel=0)

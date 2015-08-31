@@ -7,6 +7,8 @@ PALETTE = {
     'B': (0, 0, 255),
 }
 
+PATTERNS = {}
+
 class Pattern:
 
     def __init__(self, name, pat):
@@ -25,7 +27,8 @@ class Pattern:
         return PALETTE.get(self.pat[r][c], DEFAULT_C)
 
 def p(name, data):
-    return Pattern(name, data)
+    PATTERNS[name] = Pattern(name, data)
+    return PATTERNS[name]
 
 DEAR_BIG = p("dear-big", [
     #01234567890123456789
@@ -40,6 +43,22 @@ DEAR_BIG = p("dear-big", [
     ".@..@.@...@..@.@..@.", #8
     ".@@@..@@@.@..@.@..@.", #9
     "....................", #A
+    "....................", #B
+])
+
+DEAR_BOLD = p("dear-bold", [
+    #01234567890123456789
+    "....................", #0
+    "GGG..BBBB.GGG..BBB..", #1
+    "GGGG.BBBBGGGGG.BBBB.", #2
+    "GG.GGBB..GG.GG.BB.BB", #3
+    "GG.GGBB..GG..G.BB.BB", #4
+    "GG.GGBBBBGGGGG.BBBB.", #5
+    "GG.GGBBBBGGGGG.BBB..", #6
+    "GG.GGBB..GG.GG.BBBB.", #7
+    "GG.GGBB..GG.GG.BB.BB", #8
+    "GGGG.BBBBGG.GG.BB.BB", #9
+    "GGG..BBBBGG.GG.BB.BB", #A
     "....................", #B
 ])
 

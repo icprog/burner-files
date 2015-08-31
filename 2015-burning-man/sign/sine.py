@@ -13,7 +13,7 @@ class Sine(Effect):
                 shift = color_utils.cos(x + t * 10, period=period, minn=-2, maxx=2)
                 lvl = color_utils.cos(y + shift, period=10, minn=1, maxx=0.4)
                 if self.pattern.get(x, y):
-                    pixels.append((0, 0, 0))
+                    pixels.append((255, 255, 255))
                 else:
                     pixels.append((lvl * 255, 0, 0))
         return pixels

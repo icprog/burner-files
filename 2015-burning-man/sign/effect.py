@@ -6,3 +6,5 @@ class Effect(object):
         self.n_pixels = cols * rows
         self.pattern = pattern
 
+    def switch_on(self):
+        pass
