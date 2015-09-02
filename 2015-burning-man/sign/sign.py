@@ -27,12 +27,11 @@ ROWS = 12
 if False:
     pat = PATTERNS['dear-big']
     effects = [Waves(COLS, ROWS, pat),
-               FullRed(COLS, ROWS, pat),
                Sine(COLS, ROWS, pat),
                Flat(COLS, ROWS, pat),
                Wheel(COLS, ROWS, pat)]
 else:
-    effects = [Wheel(COLS, ROWS, PATTERNS['dear-bold'])]
+    effects = [Waves(COLS, ROWS, PATTERNS['dear-bold'])]
 
 
 #-------------------------------------------------------------------------------
