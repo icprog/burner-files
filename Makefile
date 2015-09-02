@@ -30,7 +30,7 @@ bin.fcserver:
 	cd vendor/fadecandy/server && make TERM='' && mv fcserver $(TOP_DIR)/bin/
 
 run.fcserver:
-	./bin/fcserver 2015-burning-man/fcserver.json
+	sudo ./bin/fcserver 2015-burning-man/fcserver.json
 
 run.dev.fcserver:
 	./bin/fcserver 2015-burning-man/fcserver-dev.json
