@@ -30,7 +30,7 @@ def p(name, data):
     PATTERNS[name] = Pattern(name, data)
     return PATTERNS[name]
 
-DEAR_BIG = p("dear-big", [
+p("dear-big", [
     #01234567890123456789
     "....................", #0
     "....................", #1
@@ -46,7 +46,7 @@ DEAR_BIG = p("dear-big", [
     "....................", #B
 ])
 
-DEAR_BOLD = p("dear-bold", [
+p("dear-bold", [
     #01234567890123456789
     "....................", #0
     "GGG..BBBB.GGG..BBB..", #1
@@ -62,7 +62,7 @@ DEAR_BOLD = p("dear-bold", [
     "....................", #B
 ])
 
-CAMP_DEAR = p("camp dear", [
+p("camp dear", [
     #01234567890123456789
     "....................", #0
     "..@@..@@..@...@.@@@.", #1
@@ -78,7 +78,7 @@ CAMP_DEAR = p("camp dear", [
     ".@@@..@@@.@..@.@..@.", #B
 ])
 
-TEST = p("test", [
+p("test", [
     #01234567890123456789
     "R@@@............@@@R", #0
     "@..................@", #1
@@ -94,7 +94,7 @@ TEST = p("test", [
     "R@@@............@@@R", #B
 ])
 
-OA_1 = p("orphan-asylum-1", [
+p("orphan-asylum-1", [
     #01234567890123456789
     "RRRR...WW...........", #0
     "R..RWW.WWW.W.W.R.WW.", #1
@@ -110,7 +110,7 @@ OA_1 = p("orphan-asylum-1", [
     "R..RWW.R.WWWRRRW...W", #B
 ])
 
-OA_2 = p("orphan-asylum-2", [
+p("orphan-asylum-2", [
     #01234567890123456789
     "RRR....WWw..........", #0
     "R.RwWW.W.W.W.W.R.WW.", #1
@@ -126,7 +126,7 @@ OA_2 = p("orphan-asylum-2", [
     "R.RwWW.RRWWWRRRWW.WW", #B
 ])
 
-OA_3 = p("orphan-asylum-3", [
+p("orphan-asylum-3", [
     #01234567890123456789
     "RRRR................", #0
     "R..RWW.WW.W...R.W..W", #1
