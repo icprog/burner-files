@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
+import effects
 import opc
 import sys
 import time
-
-from effects import FlatImage
 
 
 COLS = 20
@@ -36,14 +35,15 @@ def main():
 def run_sign(client, fps):
     start_time = time.time()
     switch_time = 0
-    effect = FlatImage(COLS, ROWS, "img/oa-main.png")
+    effect = effects.GreenT(COLS, ROWS, "img/green-t-1.png")
     while True:
         t = time.time() - start_time
 #        if t >= switch_time:
 #            effect = random.choice(effects)
 #            effect.switch_on()
 #            switch_time = t + random.uniform(3, 3)
-        pixels = effect.get_pixels(t)
+        effect.tick(t)
+        pixels = effect.get_pixels()
         client.put_pixels(pixels, channel=0)
         time.sleep(1 / fps)
 
