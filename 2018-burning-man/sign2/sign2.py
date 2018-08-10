@@ -35,15 +35,12 @@ def main():
 def run_sign(client, fps):
     start_time = time.time()
     switch_time = 0
-#    effect = effects.GreenT(COLS, ROWS, "img/green-t-1.png")
-    effect = effects.SpriteJitter(COLS, ROWS, "img/oa-main.png")
+    effect = effects.MultiEffect([
+        effects.SpriteJitter(COLS, ROWS, "img/oa-main.png"),
+        effects.GreenT(COLS, ROWS, "img/green-t-1.png"),
+    ], 10)
     while True:
-        t = time.time() - start_time
-#        if t >= switch_time:
-#            effect = random.choice(effects)
-#            effect.switch_on()
-#            switch_time = t + random.uniform(3, 3)
-        effect.tick(t)
+        effect.tick(time.time())
         pixels = effect.get_pixels()
         client.put_pixels(pixels, channel=0)
         time.sleep(1 / fps)

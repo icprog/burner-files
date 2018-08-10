@@ -160,3 +160,24 @@ class GreenT:
         return [self.p(c, r + self.dy)[:3]
                 for r in range(0, self.rows)
                 for c in range(0, self.cols)]
+
+
+class MultiEffect:
+    def __init__(self, effects, duration):
+        self.effects = effects
+        self.duration = duration
+        self.effect_idx = 0
+        self.end_ts = None
+
+    def tick(self, ts):
+        if self.end_ts is None:
+            self.end_ts = ts + self.duration
+
+        if ts >= self.end_ts:
+            self.effect_idx = (self.effect_idx + 1) % len(self.effects)
+            self.end_ts = ts + self.duration
+
+        self.effects[self.effect_idx].tick(ts)
+
+    def get_pixels(self):
+        return self.effects[self.effect_idx].get_pixels()
