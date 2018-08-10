@@ -35,7 +35,8 @@ def main():
 def run_sign(client, fps):
     start_time = time.time()
     switch_time = 0
-    effect = effects.GreenT(COLS, ROWS, "img/green-t-1.png")
+#    effect = effects.GreenT(COLS, ROWS, "img/green-t-1.png")
+    effect = effects.SpriteJitter(COLS, ROWS, "img/oa-main.png")
     while True:
         t = time.time() - start_time
 #        if t >= switch_time:
