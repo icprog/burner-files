@@ -1,5 +1,7 @@
+import random
+
 from math import cos, pi
-from PIL import Image
+from PIL import Image, ImageFilter
 
 
 def squash(v, low, high):
@@ -22,8 +24,35 @@ class FlatImage:
                 for c in range(0, self.cols)]
 
 
+def sprite_off(sprite, target_img):
+    pass
+
+
+def sprite_move(sprite, target_img):
+    target_img.paste(sprite,
+                     (random.choice([-1, 1]), random.choice([-1, 1])),
+                     mask=sprite)
+
+    
+def sprite_smooth(sprite, target_img):
+    blurred = sprite.copy()
+    blurred.paste(sprite, (0, -1), sprite)
+    blurred.paste(sprite, (0, 1), sprite)
+    blurred = Image.blend(blurred, sprite, 0.3)
+    blurred.paste(sprite, (0, 0), mask=sprite)
+    target_img.paste(blurred, None, mask=blurred)
+
+
+def normal(sprite, target_img):
+    target_img.paste(sprite, None, mask=sprite)
+
+
 class SpriteJitter:
     EMPTY_COLOR = (0, 0, 0)
+    OPS = [sprite_smooth, sprite_off, sprite_move]
+
+    EFFECT_DURATION = [0.5, 1]
+    BREAK_DURATION = [0.5, 1]
 
     def __init__(self, cols, rows, file_name):
         self.cols = cols
@@ -31,19 +60,43 @@ class SpriteJitter:
         self.image = Image.open(file_name)
         self.sprites = self.find_sprites()
         self.start_ts = None
+        self.effect_end = None
+        self.effect = None
 
     def tick(self, ts):
         if self.start_ts is None:
             self.start_ts = ts
-        self.sprite_idx = int((ts - self.start_ts) / 2) % len(self.sprites)
+            self.effect_end = ts
+            self.effect = '--start--'
 
-    def p(self, c, r):
+        if ts < self.effect_end:
+            return
+
+        if self.effect is None:
+            self.effect = random.choice(self.OPS)
+            self.effect_end = ts + self.EFFECT_DURATION[0] + self.EFFECT_DURATION[1] * random.random()
+            self.sprite_idx = random.randrange(0, len(self.sprites))
+        else:
+            self.effect = None
+            self.effect_end = ts + self.BREAK_DURATION[0] + self.BREAK_DURATION[1] * random.random()
+            self.sprite_idx = None
+
+        img = Image.new('RGBA', self.image.size, (0, 0, 0, 0))
+        for idx, s in enumerate(self.sprites):
+            if idx != self.sprite_idx:
+                img.paste(s, (0, 0), mask=s)
+        if self.sprite_idx is not None:
+            op = random.choice(self.OPS)
+            op(self.sprites[self.sprite_idx], img)
+        self.arr = img.load()
+
+    def source_p(self, c, r):
         if (c < 0) or (c >= self.image.width) or (r < 0) or (r >= self.image.height):
             return (0, 0, 0, 0)
         return self.image.load()[c, r]
 
     def get_pixels(self):
-        return [self.sprites[self.sprite_idx].load()[c, r][:3]
+        return [self.arr[c, r][:3]
                 for r in range(0, self.rows)
                 for c in range(0, self.cols)]
 
@@ -59,7 +112,7 @@ class SpriteJitter:
                 return
             for dx in [-1, 0, 1]:
                 for dy in [-1, 0, 1]:
-                    if self.p(x + dx, y + dy) == sprite_color:
+                    if self.source_p(x + dx, y + dy) == sprite_color:
                         mark_seen(x, y)
                         spr.putpixel((x, y), sprite_color)
                         if (dx != 0) or (dy != 0):
@@ -67,14 +120,14 @@ class SpriteJitter:
 
         def get_sprite(sx, sy):
             spr = Image.new('RGBA', self.image.size, (0, 0, 0, 0))
-            flood_copy(self.p(sx, sy), spr, sx, sy)
+            flood_copy(self.source_p(sx, sy), spr, sx, sy)
             return spr
 
         for x in range(0, self.image.width):
             for y in range(0, self.image.height):
                 if seen(x, y):
                     continue
-                if self.p(x, y)[:3] == (0, 0, 0):
+                if self.source_p(x, y)[:3] == (0, 0, 0):
                     continue
                 sprites.append(get_sprite(x, y))
 
