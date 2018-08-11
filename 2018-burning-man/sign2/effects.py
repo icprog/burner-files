@@ -24,6 +24,10 @@ class FlatImage:
                 for c in range(0, self.cols)]
 
 
+def randfloat(lo, hi):
+    return lo + random.random() * hi
+
+
 def sprite_off(sprite, target_img):
     pass
 
@@ -51,8 +55,9 @@ class SpriteJitter:
     EMPTY_COLOR = (0, 0, 0)
     OPS = [sprite_smooth, sprite_off, sprite_move]
 
-    EFFECT_DURATION = [0.5, 1]
+    EFFECT_DURATION = [0.2, 1.5]
     BREAK_DURATION = [0.5, 1]
+    SPRITE_IDX_DURATION = [3, 10]
 
     def __init__(self, cols, rows, file_name):
         self.cols = cols
@@ -68,26 +73,27 @@ class SpriteJitter:
             self.start_ts = ts
             self.effect_end = ts
             self.effect = '--start--'
+            self.sprite_idx_end = ts
 
-        if ts < self.effect_end:
+        if ts >= self.sprite_idx_end:
+            self.sprite_idx_end = ts + randfloat(*self.SPRITE_IDX_DURATION)
+            self.sprite_idx = random.randrange(0, len(self.sprites))
+        elif ts < self.effect_end:
             return
 
-        if self.effect is None:
+        if self.effect == normal:
             self.effect = random.choice(self.OPS)
-            self.effect_end = ts + self.EFFECT_DURATION[0] + self.EFFECT_DURATION[1] * random.random()
-            self.sprite_idx = random.randrange(0, len(self.sprites))
+            self.effect_end = ts + randfloat(*self.EFFECT_DURATION)
         else:
-            self.effect = None
-            self.effect_end = ts + self.BREAK_DURATION[0] + self.BREAK_DURATION[1] * random.random()
-            self.sprite_idx = None
+            self.effect = normal
+            self.effect_end = ts + randfloat(*self.BREAK_DURATION)
 
         img = Image.new('RGBA', self.image.size, (0, 0, 0, 0))
         for idx, s in enumerate(self.sprites):
             if idx != self.sprite_idx:
                 img.paste(s, (0, 0), mask=s)
         if self.sprite_idx is not None:
-            op = random.choice(self.OPS)
-            op(self.sprites[self.sprite_idx], img)
+            self.effect(self.sprites[self.sprite_idx], img)
         self.arr = img.load()
 
     def source_p(self, c, r):

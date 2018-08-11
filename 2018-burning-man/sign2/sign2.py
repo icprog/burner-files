@@ -37,7 +37,7 @@ def run_sign(client, fps):
     switch_time = 0
     effect = effects.MultiEffect([
         effects.SpriteJitter(COLS, ROWS, "img/oa-main.png"),
-        effects.GreenT(COLS, ROWS, "img/green-t-1.png"),
+#        effects.GreenT(COLS, ROWS, "img/green-t-1.png"),
     ], 10)
     while True:
         effect.tick(time.time())
