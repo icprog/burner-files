@@ -187,3 +187,23 @@ class MultiEffect:
 
     def get_pixels(self):
         return self.effects[self.effect_idx].get_pixels()
+
+
+class Bunny:
+    # In memory of Bull Bunny aka Michael R Oddo
+    FILE_NAME = 'img/bunny4.png'
+
+    def __init__(self, cols, rows):
+        self.cols = cols
+        self.rows = rows
+        self.image = Image.open(self.FILE_NAME)
+        self.arr = self.image.load()
+
+    def tick(self, ts):
+        pass
+
+    def get_pixels(self):
+        return [self.arr[c, r][:3]
+                for r in range(0, self.rows)
+                for c in range(0, self.cols)]
+
