@@ -45,7 +45,7 @@ def run_sign(client, fps):
         effects.SpriteJitter("img/oa-main.png"),
         effects.Bunny(),
         effects.GreenT("img/green-t-1.png"),
-    ], 10)
+    ], 3)
     ft = FrameTimer(fps)
     while True:
         ft.sleep()

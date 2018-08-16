@@ -170,25 +170,51 @@ class GreenT:
 
 
 class MultiEffect:
+    TRANSITION_TIME = 0.1
+
     def __init__(self, effects, duration):
         self.effects = effects
         self.duration = duration
         self.effect_idx = 0
+        self.state = 'effect'
         self.end_ts = None
+        self.offset = None
 
     def tick(self, ts):
         if self.end_ts is None:
             self.end_ts = ts + self.duration
 
-        if ts >= self.end_ts:
-            self.effect_idx = (self.effect_idx + 1) % len(self.effects)
-            self.end_ts = ts + self.duration
+        if self.state == 'transition':
+            self.offset = int(squash((self.TRANSITION_TIME - (self.end_ts - ts)) / self.TRANSITION_TIME * COLS, 0, COLS-1))
+            self.effects[self.effect_idx].tick(ts)
+            self.effects[(self.effect_idx + 1) % len(self.effects)].tick(ts)
 
-        self.effects[self.effect_idx].tick(ts)
+            self.pixels = [None] * ROWS * COLS
+
+            curr_pixels = self.effects[self.effect_idx].get_pixels()
+            next_pixels = self.effects[(self.effect_idx + 1) % len(self.effects)].get_pixels()
+            for c in range(0, COLS):
+                for r in range(0, ROWS):
+                    pi = r * COLS + c
+                    if c + self.offset < COLS:
+                        self.pixels[pi] = curr_pixels[pi + self.offset]
+                    else:
+                        self.pixels[pi] = next_pixels[pi + self.offset - COLS]
+
+            if ts >= self.end_ts:
+                self.effect_idx = (self.effect_idx + 1) % len(self.effects)
+                self.end_ts = ts + self.duration
+                self.state = 'effect'
+        else:
+            self.effects[self.effect_idx].tick(ts)
+            self.pixels = self.effects[self.effect_idx].get_pixels()
+
+            if ts >= self.end_ts:
+                self.end_ts = ts + self.TRANSITION_TIME
+                self.state = 'transition'
 
     def get_pixels(self):
-        return self.effects[self.effect_idx].get_pixels()
-
+        return self.pixels
 
 class Bunny:
     # In memory of Bull Bunny aka Michael R Oddo
