@@ -4,14 +4,16 @@ from math import cos, pi
 from PIL import Image, ImageFilter
 
 
+COLS = 20
+ROWS = 12
+
+
 def squash(v, low, high):
     return min(max(low, v), high)
 
 
 class FlatImage:
-    def __init__(self, cols, rows, file_name):
-        self.cols = cols
-        self.rows = rows
+    def __init__(self, file_name):
         self.image = Image.open(file_name)
         self.arr = self.image.load()
 
@@ -20,8 +22,8 @@ class FlatImage:
 
     def get_pixels(self):
         return [self.arr[c, r][:3]
-                for r in range(0, self.rows)
-                for c in range(0, self.cols)]
+                for r in range(0, ROWS)
+                for c in range(0, COLS)]
 
 
 def randfloat(lo, hi):
@@ -59,9 +61,7 @@ class SpriteJitter:
     BREAK_DURATION = [0.5, 1]
     SPRITE_IDX_DURATION = [3, 10]
 
-    def __init__(self, cols, rows, file_name):
-        self.cols = cols
-        self.rows = rows
+    def __init__(self, file_name):
         self.image = Image.open(file_name)
         self.sprites = self.find_sprites()
         self.start_ts = None
@@ -103,8 +103,8 @@ class SpriteJitter:
 
     def get_pixels(self):
         return [self.arr[c, r][:3]
-                for r in range(0, self.rows)
-                for c in range(0, self.cols)]
+                for r in range(0, ROWS)
+                for c in range(0, COLS)]
 
     def find_sprites(self):
         seen_img = Image.new('1', self.image.size, 0)
@@ -143,9 +143,7 @@ class SpriteJitter:
 class GreenT:
     LOOP_LEN = 10
 
-    def __init__(self, cols, rows, file_name):
-        self.cols = cols
-        self.rows = rows
+    def __init__(self, file_name):
         self.image = Image.open(file_name)
         (self.image_width, self.image_height) = self.image.size
         self.arr = self.image.load()
@@ -167,8 +165,8 @@ class GreenT:
 
     def get_pixels(self):
         return [self.p(c, r + self.dy)[:3]
-                for r in range(0, self.rows)
-                for c in range(0, self.cols)]
+                for r in range(0, ROWS)
+                for c in range(0, COLS)]
 
 
 class MultiEffect:
@@ -196,9 +194,7 @@ class Bunny:
     # In memory of Bull Bunny aka Michael R Oddo
     FILE_NAME = 'img/bunny4.png'
 
-    def __init__(self, cols, rows):
-        self.cols = cols
-        self.rows = rows
+    def __init__(self):
         self.image = Image.open(self.FILE_NAME)
         self.arr = self.image.load()
 
@@ -207,5 +203,5 @@ class Bunny:
 
     def get_pixels(self):
         return [self.arr[c, r][:3]
-                for r in range(0, self.rows)
-                for c in range(0, self.cols)]
+                for r in range(0, ROWS)
+                for c in range(0, COLS)]

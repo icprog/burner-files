@@ -6,10 +6,6 @@ import sys
 import time
 
 
-COLS = 20
-ROWS = 12
-
-
 def main():
     if len(sys.argv) == 1:
         IP_PORT = '127.0.0.1:7890'
@@ -32,19 +28,30 @@ def main():
     run_sign(client, 20)
 
 
+class FrameTimer:
+    def __init__(self, fps):
+        self.ts = None
+        self.delay = 1 / fps
+
+    def sleep(self):
+        now = time.time()
+        if self.ts is not None:
+            time.sleep(max(0, (self.ts + self.delay) - now))
+        self.ts = now
+
+
 def run_sign(client, fps):
-    start_time = time.time()
-    switch_time = 0
     effect = effects.MultiEffect([
-        effects.Bunny(COLS, ROWS),
-#        effects.SpriteJitter(COLS, ROWS, "img/oa-main.png"),
-#        effects.GreenT(COLS, ROWS, "img/green-t-1.png"),
+        effects.SpriteJitter("img/oa-main.png"),
+        effects.Bunny(),
+        effects.GreenT("img/green-t-1.png"),
     ], 10)
+    ft = FrameTimer(fps)
     while True:
+        ft.sleep()
         effect.tick(time.time())
         pixels = effect.get_pixels()
         client.put_pixels(pixels, channel=0)
-        time.sleep(1 / fps)
 
 
 if __name__ == '__main__':
