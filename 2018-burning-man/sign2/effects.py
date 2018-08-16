@@ -160,7 +160,10 @@ class GreenT:
         )
 
     def p(self, c, r):
-        return self.arr[squash(c, 0, self.image_width-1), squash(r, 0, self.image_height-1)]
+        return self.arr[
+            squash(c, 0, self.image_width-1),
+            squash(r, 0, self.image_height-1),
+        ]
 
     def get_pixels(self):
         return [self.p(c, r + self.dy)[:3]
@@ -206,4 +209,3 @@ class Bunny:
         return [self.arr[c, r][:3]
                 for r in range(0, self.rows)
                 for c in range(0, self.cols)]
-
